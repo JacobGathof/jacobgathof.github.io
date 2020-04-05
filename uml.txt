@@ -1,4 +1,81 @@
 @startuml
-class World;
-class Renderer;
+class World{
+---
+Entry point for all World-based logic
+---
+map<string, Room*> rooms
+
+void setRoom(Room* room)
+}
+
+class Room{
+---
+An instance of a world area
+---
+ObjectMap objMap
+
+}
+
+
+class ObjectMap{
+---
+An abstraction of a map of objects. 
+Able to handle complex sorting and collision over different layers
+---
+vector<Object*> allObjects
+map<Layer, vector<Object*>> objectMap;
+vector<pair<ObjectType, ObjectType>> collisionMask;
+
+void sort()
+void handleCollisions()
+void addObject(Layer layer, Object* obj)
+
+}
+
+
+class Object{
+---
+Simplified Object structure
+---
+string name
+Vector3f position
+Vector3f scale
+
+void update(float dt)
+}
+
+
+class CollidableComponent{
+---
+
+---
+Hitbox* hitbox
+}
+
+
+class Hitbox{
+---
+A cube hitbox
+---
+Vector3f position
+Vector3f scale
+}
+
+class CollisionUtils{
+
+}
+
+note right of CollisionUtils
+  Types of movement:
+    Absolute movement (Arrow keys, cutscene movement, scripted, etc)
+    Object collision (Move into unmoveable object, object moves into you)
+    Terrain collision (Must consider movement in all axes - ground + walls)
+    Forces (Apply a direction of movement for a period of time)
+end note
+
+World --* Room
+Room --* ObjectMap
+ObjectMap --* Object
+Object --* CollidableComponent
+CollidableComponent --* Hitbox
 @enduml
